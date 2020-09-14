@@ -1,0 +1,35 @@
+<div class="container">
+    <h2>Sign In</h2>
+
+    <form name="form" (ngSubmit)="f.form.valid && onSubmit(f)" #f="ngForm" novalidate>
+        <!--Username-->
+        <div class="form-group">
+            <label for = "username">Username</label>
+            <input id = "username" type="text" name="username" class = "form-control" placeholder = "username" 
+                [(ngModel)] = "model.username" #username = "ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && username.invalid }" required
+            />
+            <div *ngIf="f.submitted && username.invalid" class="invalid-feedback">
+                <div *ngIf="username.errors.required">Username is required</div>
+            </div>
+        </div>
+
+        
+        <!--Password-->
+        <div class="form-group">
+            <label for = "password">Password</label>
+            <input id = "password" type="password" name="password" class = "form-control"
+                placeholder = "password" [(ngModel)] = "model.password" #password = "ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required
+            />
+            <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
+                <div *ngIf="password.errors.required">Password is required</div>
+            </div>
+        </div>
+        <span class="alert alert-danger" *ngIf = "postErrorMessage">{{ postErrorMessage }}</span>
+        <br>
+        <br>
+        <button class="btn btn-primary" type="submit">Sign In</button>
+    </form>
+</div>
+
