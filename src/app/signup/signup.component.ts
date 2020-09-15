@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { User } from '../data/register.interface'
 import { DataService } from '../data/data.service'
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -15,11 +16,16 @@ export class SignupComponent implements OnInit {
     lastName: null,
     password: null 
   };
+  
+  private route: ActivatedRoute;
+
   postError: boolean;
   postErrorMessage: string;
   errorMessage: String; 
+  successMessage: string;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,
+              private router: Router) { }
   
 
   onSubmit(form: NgForm){
@@ -28,7 +34,13 @@ export class SignupComponent implements OnInit {
     console.log(this.users);
     if(form.valid){
       this.dataService.signUp(this.users).subscribe(
-      result => console.log("success", result),
+        (result:any) => {
+          if(result.status==200){
+            this.successMessage="Signup Successful";
+            this.router.navigate(['/signin']);
+            //this.router.navigateByUrl('/signin');
+          }
+        },
       error => this.onHttpError(error)
     );
     }

@@ -27,6 +27,7 @@
             </div>
         </div>
         <span class="alert alert-danger" *ngIf = "postErrorMessage">{{ postErrorMessage }}</span>
+        <span class="text-success" *ngIf="successMessage">{{successMessage}}</span>
         <br>
         <br>
         <button class="btn btn-primary" type="submit">Sign In</button>

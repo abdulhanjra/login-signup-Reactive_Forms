@@ -50,7 +50,9 @@
                 <div *ngIf="password.errors.minlength">Password must be at least 5 characters</div>
             </div>
         </div>     
-                
+        <span class="text-success" *ngIf="successMessage">{{successMessage}}</span>
+        <br>
+        <br>        
         <button class="btn btn-primary" type="submit">Sign Up</button>
         <a routerLink="../signin" class="btn btn-link">Cancel</a>
     </form>

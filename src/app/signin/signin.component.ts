@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { DataService } from '../data/data.service'
 
@@ -16,27 +17,32 @@ export class SigninComponent implements OnInit {
 }
   postError: boolean;
   postErrorMessage: string;
-  constructor(private dataService: DataService) { }
+  successMessage: String;
+  
+  
+  constructor(private dataService: DataService, private router: Router) { }
 
   ngOnInit(): void {
   }
   
   onSubmit(form: NgForm){
     console.log("In onSubmit()", form.valid);
-    console.log(this.model);
     if(form.valid){
       this.dataService.signIn(this.model).subscribe(
-        
-      result => console.log("success", result),
+      (result:any) => {
+        if(result.status==200){
+          this.successMessage="Login Successful"
+          this.router.navigate(['/home/:id']);
+        }
+      },
       error => this.onHttpError(error)
     );
     }
     else{
-      console.log('Invalid username or password');
       this.postError = true;
       this.postErrorMessage = "Please fix above errors";
     }
- }
+  }
 
  onHttpError(err: any): Observable<never>{
    let errorMessage = '';

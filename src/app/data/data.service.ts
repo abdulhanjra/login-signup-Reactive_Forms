@@ -9,8 +9,6 @@ import { tap, catchError, map  } from 'rxjs/operators';
 })
 export class DataService {
   private userUrl = 'http://127.0.0.1:3000/';
-  
-
 
   constructor(private http: HttpClient){}
   
@@ -24,7 +22,11 @@ export class DataService {
 
   getAll() {
     return this.http.get<User[]>(`http://127.0.0.1:3000/api/users`);
-}
+  }
+
+  getById(id: string) {
+    return this.http.get<User>(`http://127.0.0.1:3000/api/users/${id}`);
+  }
 
   private handleError(err: HttpErrorResponse){
     let errorMessage = " ";
