@@ -1,0 +1,11 @@
+<div *ngIf="isSubmitted && form_control.errors">
+    <span
+        class="text-danger"
+    *ngIf="form_control.errors.required">Field is Required
+    </span>
+    <span
+    class="text-danger"
+*ngIf="form_control.errors.pattern">Format does not Match
+</span>
+    
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from './register.interface';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError, map  } from 'rxjs/operators';
 
@@ -10,22 +10,38 @@ import { tap, catchError, map  } from 'rxjs/operators';
 export class DataService {
   private userUrl = 'http://127.0.0.1:3000/';
 
-  constructor(private http: HttpClient){}
+  public currentUserSubject: BehaviorSubject<any>;
+  public currentUser: Observable<any>;
+
+  constructor(private http: HttpClient){
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  saveUser(user){
+    this.currentUserSubject.next(user);
+    localStorage.removeItem('currentUser');
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
   
-  signUp(user) {
+  signUp(user: User) {
     return this.http.post(`http://127.0.0.1:3000/api/users/register`, user, { observe: 'response' });
   }
 
-  signIn(user) {
-    return this.http.post(`http://127.0.0.1:3000/api/users/authenticate`,  user , { observe: 'response' });
+  signIn(username, password) {
+    return this.http.post(`http://127.0.0.1:3000/api/users/authenticate`,  {username, password} , { observe: 'response' });
   }
 
   getAll() {
-    return this.http.get<User[]>(`http://127.0.0.1:3000/api/users`);
+    return this.http.get(`http://127.0.0.1:3000/api/users`);
   }
 
   getById(id: string) {
     return this.http.get<User>(`http://127.0.0.1:3000/api/users/${id}`);
+  }
+
+  public get userValue(): User {
+    return this.currentUserSubject.value;
   }
 
   private handleError(err: HttpErrorResponse){
@@ -38,7 +54,13 @@ export class DataService {
     }
     console.error(errorMessage);
     return throwError(errorMessage);
-}
+  }
+
+  logout() :void {    
+    localStorage.setItem('isLoggedIn','false');    
+    localStorage.removeItem('token');    
+    localStorage.removeItem('currentUser');
+  } 
 
   
 }

@@ -1,6 +1,9 @@
+<a href="javascript:void(0);" (click)="logout()">Logout</a>
+
 <h1>Users</h1>
+<h4>Hello {{user.firstName}} {{user.lastName}}!</h4>
+<h4>Username: {{user.username}}</h4>
 <table class="table table-striped">
-    <h1>Hi {{user.firstName}}!</h1>
     <thead>
         <tr>
             <th style="width: 30%">First Name</th>
@@ -10,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr *ngFor = "let user of users">
             <td>{{user.firstName}}</td>
             <td>{{user.lastName}}</td>
             <td>{{user.username}}</td>
